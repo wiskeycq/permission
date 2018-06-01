@@ -15,7 +15,7 @@ import java.util.*;
 /**
  * @Auther: caoqsq
  * @Date: 2018/6/1 13:23
- * @Description: bean参数全校验
+ * @Description: bean参数校验类封装
  */
 public class BeanValidator {
 

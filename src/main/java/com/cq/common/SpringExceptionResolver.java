@@ -31,6 +31,7 @@ public class SpringExceptionResolver implements HandlerExceptionResolver {
                 JsonData jsonData = JsonData.fail(e.getMessage());
                 mv = new ModelAndView("jsonView",jsonData.toMap());
             } else {
+                //JsonData jsonData = JsonData.fail(e.toString());
                 JsonData jsonData = JsonData.fail(defaultMsg);
                 mv = new ModelAndView("jsonView",jsonData.toMap());//返回的数据已json格式返回，jsonView是spring-servlet.xml中定义的jsonView
             }

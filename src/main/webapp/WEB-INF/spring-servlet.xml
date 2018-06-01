@@ -8,12 +8,18 @@
     <!-- 启动注解驱动的spring mvc 功能,包扫描下加了controller，service等注解的会注入成bean -->
     <mvc:annotation-driven />
 
+    <mvc:interceptors>
+        <bean class="com.cq.common.HttpInterceptor" />
+    </mvc:interceptors>
+
     <!-- 启动包扫描功能 -->
     <context:component-scan base-package="com.cq.controller" />
     <context:component-scan base-package="com.cq.service" />
 
     <!-- 注入自定义spring mvc全局异常处理 -->
     <bean class="com.cq.common.SpringExceptionResolver" />
+    <!--注入自定义获取spring上下文bean-->
+    <bean class="com.cq.common.ApplicationContextHelper" />
 
     <!-- 请求返回时json数据时用这个处理 -->
     <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"  />

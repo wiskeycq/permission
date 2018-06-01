@@ -1,10 +1,15 @@
 package com.cq.controller;
 
+import com.cq.common.ApplicationContextHelper;
 import com.cq.common.JsonData;
+import com.cq.dao.SysAclMapper;
 import com.cq.exception.PermissionException;
+import com.cq.model.SysAcl;
 import com.cq.param.TestVo;
 import com.cq.util.BeanValidator;
+import com.cq.util.JsonMapper;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -21,6 +26,9 @@ import java.util.Map;
 @Controller
 @Slf4j
 public class TestController {
+
+    @Autowired
+    private ApplicationContextHelper applicationContextHelper;
 
     @ResponseBody
     @RequestMapping("/hello")
@@ -70,5 +78,16 @@ public class TestController {
     public void validate1(TestVo vo) {
         log.info("validate");
         BeanValidator.check(vo);
+    }
+
+    @ResponseBody
+    @RequestMapping("/getBean.json")
+    public void applicationContext(TestVo vo) {
+        log.info("validate");
+        SysAclMapper sysAclMapper =null;
+        sysAclMapper=applicationContextHelper.popBean(SysAclMapper.class);
+        //SysAcl sysAcl = sysAclMapper.selectByPrimaryKey(1);
+        SysAcl sysAcl = new SysAcl();
+        log.info("json数据为：{}",JsonMapper.obj2String(sysAcl));
     }
 }
