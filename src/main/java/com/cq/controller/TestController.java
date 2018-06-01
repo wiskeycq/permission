@@ -2,10 +2,15 @@ package com.cq.controller;
 
 import com.cq.common.JsonData;
 import com.cq.exception.PermissionException;
+import com.cq.param.TestVo;
+import com.cq.util.BeanValidator;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.Iterator;
+import java.util.Map;
 
 /**
  * @Auther: caoqsq
@@ -45,5 +50,25 @@ public class TestController {
         log.info("{}","非自定义异常测试！");
         throw new RuntimeException("test exception");
         //return JsonData.success("hello,permission!");
+    }
+
+    @ResponseBody
+    @RequestMapping("/validate.json")
+    public JsonData validate(TestVo vo) {
+        log.info("validate");
+        Map<String, String> map= BeanValidator.validateObject(vo);
+        if (map!=null && map.entrySet().size()>0) {
+            for (Map.Entry<String,String> entry : map.entrySet()) {
+                log.info("{}->{}",entry.getKey(),entry.getValue());
+            }
+        }
+        return JsonData.fail("test validate");
+    }
+
+    @ResponseBody
+    @RequestMapping("/validate1.json")
+    public void validate1(TestVo vo) {
+        log.info("validate");
+        BeanValidator.check(vo);
     }
 }

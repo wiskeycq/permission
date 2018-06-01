@@ -1,5 +1,6 @@
 package com.cq.common;
 
+import com.cq.exception.ParamException;
 import com.cq.exception.PermissionException;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.servlet.HandlerExceptionResolver;
@@ -26,7 +27,7 @@ public class SpringExceptionResolver implements HandlerExceptionResolver {
         // 这里我们要求项目中所有请求json数据，都使用.json结尾
         if (url.endsWith(".json")) {
             //自定义异常的情况
-            if (e instanceof PermissionException) {
+            if (e instanceof PermissionException || e instanceof ParamException) {
                 JsonData jsonData = JsonData.fail(e.getMessage());
                 mv = new ModelAndView("jsonView",jsonData.toMap());
             } else {
