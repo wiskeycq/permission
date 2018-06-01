@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns="http://www.springframework.org/schema/beans"
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-       xmlns:context="http://www.springframework.org/schema/context" xmlns:mvc="http://www.alibaba.com/schema/stat"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.alibaba.com/schema/stat http://www.alibaba.com/schema/stat.xsd">
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc.xsd">
 
     <!-- 启动注解驱动的spring mvc 功能,包扫描下加了controller，service等注解的会注入成bean -->
     <mvc:annotation-driven />
@@ -11,8 +12,15 @@
     <context:component-scan base-package="com.cq.controller" />
     <context:component-scan base-package="com.cq.service" />
 
+    <!-- 注入自定义spring mvc全局异常处理 -->
+    <bean class="com.cq.common.SpringExceptionResolver" />
+
     <!-- 请求返回时json数据时用这个处理 -->
     <bean id="jsonView" class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"  />
+
+    <!--不配置返回jsonview会报错，回去访问/WEB-INF/views/jsonView.jsp页面，而不是返回json数据-->
+    <!--BeanNameViewResolver 解析器: 使用视图的名字来解析视图,自定义视图可进行配置-->
+    <bean class="org.springframework.web.servlet.view.BeanNameViewResolver" />
 
     <!-- 请求返回时jsp页面时用这个处理 -->
     <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
