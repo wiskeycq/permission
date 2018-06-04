@@ -32,7 +32,7 @@
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">
         <property name="configLocation" value="classpath:mybatis-config.xml" />
         <property name="dataSource" ref="dataSource" />
-       <!-- <property name="mapperLocations" value="classpath:mapper/*.xml" />-->
+        <property name="mapperLocations" value="classpath:mapper/*.xml" />
     </bean>
 
     <!--知道了连接数据库的类放在什么地方，spring加载的时候会先加载MapperScannerConfigurer这个类，然后找到具体的操作数据库的类，sql位置，数据源，数据库的连接，从而就可以对数据库进行操作-->
