@@ -26,9 +26,15 @@ public class UserController {
     @Resource
     private SysUserService sysUserService;
 
+    @RequestMapping("/logout.page")
+    public void logout(HttpServletRequest request, HttpServletResponse response) throws IOException {
+        request.getSession().invalidate();
+        String path = "signin.jsp";
+        response.sendRedirect(path);
+    }
+
     @RequestMapping("/login.page")
     public void login(HttpServletRequest request, HttpServletResponse response) throws IOException, ServletException {
-
         String username =  request.getParameter("username");
         String password = request.getParameter("password");
         String ret = request.getParameter("ret");
@@ -51,6 +57,10 @@ public class UserController {
                 response.sendRedirect(ret);
             } else {
                 response.sendRedirect("/admin/index.page");
+                return;//如果不加return后面的代码也会执行，会报Cannot forward after response has beencommitted错误，重复跳转
+                //因为服务器端使用sendRedirect跳转到客户端的时候,不能在使用req.getRequestDispatcher("跳转的页面").forward(req, reqs);跳转; 所以在跳转之后，return就不会往下执行
+                //request.getRequestDispatcher().forward(request,response)和response.sendRedirect()的区别
+                //https://blog.csdn.net/uk8692/article/details/12865571
             }
         }
         request.setAttribute("error",errorMsg);
