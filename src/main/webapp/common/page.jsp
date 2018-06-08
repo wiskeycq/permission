@@ -38,27 +38,27 @@
     function renderPage(url, total, pageNo, pageSize, currentSize, idElement, callback) {
         var maxPageNo = Math.ceil(total / pageSize);
         var paramStartChar = url.indexOf("?") > 0 ? "&" : "?";
-        var from = (pageNo - 1) * pageSize + 1;
+        var from = (pageNo - 1) * pageSize + 1;//当前页从哪里开始
         var view = {
             from: from > total ? total : from,
             to: (from + currentSize - 1) > total ? total : (from + currentSize - 1),
-            total : total,
-            pageNo : pageNo,
-            maxPageNo : maxPageNo,
-            nextPageNo: pageNo >= maxPageNo ? maxPageNo : (pageNo + 1),
-            beforePageNo : pageNo == 1 ? 1 : (pageNo - 1),
-            firstUrl : (pageNo == 1) ? '' : (url + paramStartChar + "pageNo=1&pageSize=" + pageSize),
-            beforeUrl: (pageNo == 1) ? '' : (url + paramStartChar + "pageNo=" + (pageNo - 1) + "&pageSize=" + pageSize),
-            nextUrl : (pageNo >= maxPageNo) ? '' : (url + paramStartChar + "pageNo=" + (pageNo + 1) + "&pageSize=" + pageSize),
-            lastUrl : (pageNo >= maxPageNo) ? '' : (url + paramStartChar + "pageNo=" + maxPageNo + "&pageSize=" + pageSize)
+            total : total,//总条数
+            pageNo : pageNo,//当前页码
+            maxPageNo : maxPageNo,//最大页码
+            nextPageNo: pageNo >= maxPageNo ? maxPageNo : (pageNo + 1),//下一页
+            beforePageNo : pageNo == 1 ? 1 : (pageNo - 1),//上一页
+            firstUrl : (pageNo == 1) ? '' : (url + paramStartChar + "pageNo=1&pageSize=" + pageSize),//首页url
+            beforeUrl: (pageNo == 1) ? '' : (url + paramStartChar + "pageNo=" + (pageNo - 1) + "&pageSize=" + pageSize),//上一页url
+            nextUrl : (pageNo >= maxPageNo) ? '' : (url + paramStartChar + "pageNo=" + (pageNo + 1) + "&pageSize=" + pageSize),//下一页url
+            lastUrl : (pageNo >= maxPageNo) ? '' : (url + paramStartChar + "pageNo=" + maxPageNo + "&pageSize=" + pageSize)//最后一页url
         };
         $("#" + idElement).html(Mustache.render(paginateTemplate, view));
 
         $(".page-action").click(function(e) {
-            e.preventDefault();
+            e.preventDefault();//拦截默认事件
             $("#" + idElement + " .pageNo").val($(this).attr("data-target"));
             var targetUrl  = $(this).attr("data-url");
-            if(targetUrl != '') {
+            if(targetUrl != '') {//url不为空，向后台发送请求
                 $.ajax({
                     url : targetUrl,
                     success: function (result) {

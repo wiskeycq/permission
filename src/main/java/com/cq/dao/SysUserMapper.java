@@ -1,6 +1,8 @@
 package com.cq.dao;
 
+import com.cq.beans.PageQuery;
 import com.cq.model.SysUser;
+import java.util.List;
 import org.apache.ibatis.annotations.Param;
 
 public interface SysUserMapper {
@@ -21,4 +23,8 @@ public interface SysUserMapper {
     int countByMail(@Param("mail") String mail,@Param("id") Integer id);
 
     int countByTelephone(@Param("telephone") String telephone,@Param("id") Integer id);
+
+    int countByDeptId(@Param("deptId") Integer deptId);
+
+    List<SysUser> getPageByDeptId(@Param("deptId") Integer deptId, @Param("page") PageQuery page);
 }

@@ -1,5 +1,7 @@
 package com.cq.service;
 
+import com.cq.beans.PageQuery;
+import com.cq.beans.PageResult;
 import com.cq.dao.SysUserMapper;
 import com.cq.exception.ParamException;
 import com.cq.model.SysUser;
@@ -8,6 +10,7 @@ import com.cq.util.BeanValidator;
 import com.cq.util.MD5Util;
 import com.cq.util.PasswordUtil;
 import com.google.common.base.Preconditions;
+import java.util.List;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -63,16 +66,27 @@ public class SysUserService {
     }
 
     //邮箱是否存在校验 true存在
-    private boolean checkEmailExist(String email,Integer userId) {
+    public boolean checkEmailExist(String email,Integer userId) {
         return sysUserMapper.countByMail(email,userId) > 0;
     }
 
     //电话是否存在校验 true存在
-    private boolean checkPhoneExist(String phone,Integer userId) {
+    public boolean checkPhoneExist(String phone,Integer userId) {
         return sysUserMapper.countByTelephone(phone,userId) > 0;
     }
 
     public SysUser findByKeyword(String keyword) {
         return sysUserMapper.findByKeyword(keyword);
     }
+
+    public PageResult<SysUser> getPageByDeptId(Integer deptId, PageQuery query) {
+        BeanValidator.check(query);
+        int total = sysUserMapper.countByDeptId(deptId);
+        if (total > 0) {
+            List<SysUser> list = sysUserMapper.getPageByDeptId(deptId,query);
+            return PageResult.<SysUser>builder().total(total).data(list).build();
+        }
+        return PageResult.<SysUser>builder().build();
+    }
+
 }
