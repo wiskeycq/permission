@@ -2,11 +2,13 @@ package com.cq.service;
 
 import com.cq.beans.PageQuery;
 import com.cq.beans.PageResult;
+import com.cq.common.RequestHolder;
 import com.cq.dao.SysUserMapper;
 import com.cq.exception.ParamException;
 import com.cq.model.SysUser;
 import com.cq.param.UserParam;
 import com.cq.util.BeanValidator;
+import com.cq.util.IpUtil;
 import com.cq.util.MD5Util;
 import com.cq.util.PasswordUtil;
 import com.google.common.base.Preconditions;
@@ -40,10 +42,10 @@ public class SysUserService {
         SysUser user = SysUser.builder().username(param.getUsername()).telephone(param.getTelephone())
                 .mail(param.getMail()).deptId(param.getDeptId()).status(param.getStatus()).remark(param.getRemark()).build();
         user.setPassword(encryptedPassword);
-        user.setOperateIp("127.0.0.1");
+        user.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         user.setOperateTime(new Date());
-        user.setOperator("sys");
-        // todo 发送Email
+        user.setOperator(RequestHolder.getCurrentUser().getUsername());//RequestHolder当中保存了用户的所有请求和用户登录信息；当然也可以从controller中通过传参,从request的session中拿到用户信息，但这样大大减少了传递的从参数，比较方便拿到用户信息
+        // todo 发送Email 如果需要则加
         sysUserMapper.insertSelective(user);
     }
 
@@ -59,8 +61,8 @@ public class SysUserService {
         Preconditions.checkNotNull(before,"待更新的用户不存在");
         SysUser user = SysUser.builder().id(param.getId()).username(param.getUsername()).telephone(param.getTelephone())
                 .password(before.getPassword()).mail(param.getMail()).deptId(param.getDeptId()).status(param.getStatus()).remark(param.getRemark()).build();
-        user.setOperator("updateUser");
-        user.setOperateIp("127.0.0.1");
+        user.setOperator(RequestHolder.getCurrentUser().getUsername());
+        user.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         user.setOperateTime(new Date());
         sysUserMapper.updateByPrimaryKeySelective(user);
     }

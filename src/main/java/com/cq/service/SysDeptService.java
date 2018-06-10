@@ -1,10 +1,12 @@
 package com.cq.service;
 
+import com.cq.common.RequestHolder;
 import com.cq.dao.SysDeptMapper;
 import com.cq.exception.ParamException;
 import com.cq.model.SysDept;
 import com.cq.param.DeptParam;
 import com.cq.util.BeanValidator;
+import com.cq.util.IpUtil;
 import com.cq.util.LevelUtil;
 import com.google.common.base.Preconditions;
 import org.apache.commons.collections.CollectionUtils;
@@ -35,9 +37,9 @@ public class SysDeptService {
         SysDept dept = SysDept.builder().name(param.getName()).parentId(param.getParentId())
                 .seq(param.getSeq()).remark(param.getRemark()).build();
         dept.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()),param.getParentId()));
-        dept.setOperateIp("127.0.0.1");
+        dept.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         dept.setOperateTime(new Date());
-        dept.setOperator("sys");
+        dept.setOperator(RequestHolder.getCurrentUser().getUsername());
         sysDeptMapper.insertSelective(dept);
     }
 
@@ -54,15 +56,15 @@ public class SysDeptService {
         SysDept after = SysDept.builder().id(param.getId()).name(param.getName()).parentId(param.getParentId())
                 .seq(param.getSeq()).remark(param.getRemark()).build();
         after.setLevel(LevelUtil.calculateLevel(getLevel(param.getParentId()), param.getParentId()));
-        after.setOperator("updateSys");
-        after.setOperateIp("127.0.0.1");
+        after.setOperator(RequestHolder.getCurrentUser().getUsername());
+        after.setOperateIp(IpUtil.getRemoteIp(RequestHolder.getCurrentRequest()));
         after.setOperateTime(new Date());
 
         updateWithChild(before, after);
     }
 
     @Transactional
-    private void updateWithChild(SysDept before, SysDept after) {
+    public void updateWithChild(SysDept before, SysDept after) {
         String newLevelPrefix = after.getLevel();
         String oldLevelPrefix = before.getLevel();
         //如果新部门的层级和旧部门的层级不一致的话，才做子部门的更新

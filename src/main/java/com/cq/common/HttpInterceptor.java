@@ -31,9 +31,9 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
 
     @Override//请求正确处理结束调用
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
-        String url = request.getRequestURL().toString();
+      /*  String url = request.getRequestURL().toString();
         Map map = request.getParameterMap();
-        log.info("request post url:{},params:{}",url, JsonMapper.obj2String(map));
+        log.info("request post url:{},params:{}",url, JsonMapper.obj2String(map));*/
     }
 
     @Override//请求处理结束，不管是正常结束还是异常结束，都会调用
@@ -43,5 +43,11 @@ public class HttpInterceptor extends HandlerInterceptorAdapter {
         long startTime = (long)request.getAttribute(START_TIME);
         long endTime = System.currentTimeMillis();
         log.info("request after url:{},params:{},costTime:{}",url, JsonMapper.obj2String(map),endTime-startTime);
+        removeThreadLocalInfo();
+    }
+
+    public void removeThreadLocalInfo() {
+        RequestHolder.removeRquest();
+        RequestHolder.removeUser();
     }
 }
