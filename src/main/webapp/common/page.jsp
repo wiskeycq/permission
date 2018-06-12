@@ -45,11 +45,11 @@
             total : total,//总条数
             pageNo : pageNo,//当前页码
             maxPageNo : maxPageNo,//最大页码
-            nextPageNo: pageNo >= maxPageNo ? maxPageNo : (pageNo + 1),//下一页
+            nextPageNo: pageNo >= maxPageNo ? maxPageNo : (parseInt(pageNo) + parseInt(1)),//下一页
             beforePageNo : pageNo == 1 ? 1 : (pageNo - 1),//上一页
             firstUrl : (pageNo == 1) ? '' : (url + paramStartChar + "pageNo=1&pageSize=" + pageSize),//首页url
             beforeUrl: (pageNo == 1) ? '' : (url + paramStartChar + "pageNo=" + (pageNo - 1) + "&pageSize=" + pageSize),//上一页url
-            nextUrl : (pageNo >= maxPageNo) ? '' : (url + paramStartChar + "pageNo=" + (pageNo + 1) + "&pageSize=" + pageSize),//下一页url
+            nextUrl : (pageNo >= maxPageNo) ? '' : (url + paramStartChar + "pageNo=" + (parseInt(pageNo) + parseInt(1)) + "&pageSize=" + pageSize),//下一页url
             lastUrl : (pageNo >= maxPageNo) ? '' : (url + paramStartChar + "pageNo=" + maxPageNo + "&pageSize=" + pageSize)//最后一页url
         };
         $("#" + idElement).html(Mustache.render(paginateTemplate, view));
