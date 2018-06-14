@@ -20,7 +20,7 @@
     <mvc:resources location="/css/" mapping="/css/**"/>
     <mvc:resources location="/bootstrap3.3.5/" mapping="/bootstrap3.3.5/**"/>
     <mvc:resources location="/assets/" mapping="/assets/**"/>
-    <!--<mvc:resources location="/ztree/" mapping="/ztree/**"/>-->
+    <mvc:resources location="/ztree/" mapping="/ztree/**"/>
 
     <!-- 注入自定义spring mvc全局异常处理 -->
     <bean class="com.cq.common.SpringExceptionResolver" />

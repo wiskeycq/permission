@@ -154,8 +154,8 @@
         // zTree
         <!-- 树结构相关 开始 -->
         var zTreeObj = [];
-        var modulePrefix = 'm_';
-        var aclPrefix = 'a_';
+        var modulePrefix = 'm_';//权限模块开头
+        var aclPrefix = 'a_';//权限点开头
         var nodeMap = {};
 
         var setting = {
@@ -258,6 +258,7 @@
         }
 
         function loadRoleAcl(selectedRoleId) {
+            //为-1代表没有被选中
             if (selectedRoleId == -1) {
                 return;
             }
@@ -410,6 +411,7 @@
                 }
             })
         }
+
         $("#roleTab a[data-toggle='tab']").on("shown.bs.tab", function(e) {
             if(lastRoleId == -1) {
                 showMessage("加载角色关系","请先在左侧选择操作的角色", false);
