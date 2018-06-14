@@ -2,6 +2,7 @@ package com.cq.service;
 
 import com.cq.common.RequestHolder;
 import com.cq.dao.SysDeptMapper;
+import com.cq.dao.SysUserMapper;
 import com.cq.exception.ParamException;
 import com.cq.model.SysDept;
 import com.cq.param.DeptParam;
@@ -28,6 +29,8 @@ public class SysDeptService {
 
     @Resource
     private SysDeptMapper sysDeptMapper;
+    @Resource
+    private SysUserMapper sysUserMapper;
 
     public void saveDept(DeptParam param) {
         BeanValidator.check(param);
@@ -99,7 +102,7 @@ public class SysDeptService {
         return dept.getLevel();
     }
 
-/*    public void delete(int deptId) {
+    public void delete(Integer deptId) {
         SysDept dept = sysDeptMapper.selectByPrimaryKey(deptId);
         Preconditions.checkNotNull(dept, "待删除的部门不存在，无法删除");
         if (sysDeptMapper.countByParentId(dept.getId()) > 0) {
@@ -109,5 +112,5 @@ public class SysDeptService {
             throw new ParamException("当前部门下面有用户，无法删除");
         }
         sysDeptMapper.deleteByPrimaryKey(deptId);
-    }*/
+    }
 }

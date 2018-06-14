@@ -29,7 +29,7 @@ public class SysUserService {
     @Resource
     private SysUserMapper sysUserMapper;
 
-    public void saveDept(UserParam param) {
+    public void saveUser(UserParam param) {
         BeanValidator.check(param);
         if (checkEmailExist(param.getMail(),param.getId())) {
             throw new ParamException("邮箱已经存在");

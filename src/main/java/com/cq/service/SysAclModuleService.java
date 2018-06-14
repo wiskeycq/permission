@@ -1,6 +1,7 @@
 package com.cq.service;
 
 import com.cq.common.RequestHolder;
+import com.cq.dao.SysAclMapper;
 import com.cq.dao.SysAclModuleMapper;
 import com.cq.exception.ParamException;
 import com.cq.model.SysAclModule;
@@ -28,6 +29,8 @@ public class SysAclModuleService {
 
     @Resource
     private SysAclModuleMapper sysAclModuleMapper;
+    @Resource
+    private SysAclMapper sysAclMapper;
 
     public void save(AclModuleParam param) {
         BeanValidator.check(param);
@@ -91,6 +94,18 @@ public class SysAclModuleService {
             return null;
         }
         return aclModule.getLevel();
+    }
+
+    public void delete(Integer aclModuleId) {
+        SysAclModule aclModule = sysAclModuleMapper.selectByPrimaryKey(aclModuleId);
+        Preconditions.checkNotNull(aclModule,"待删除的权限模块不存在，无法删除");
+        if (sysAclModuleMapper.countByParentId(aclModuleId)>0) {
+            throw new ParamException("当前模块下面有子模块，无法删除");
+        }
+        if (sysAclMapper.countByAclModuleId(aclModuleId) > 0) {
+            throw new ParamException("当前模块下面有权限点，无法删除");
+        }
+        sysAclModuleMapper.deleteByPrimaryKey(aclModuleId);
     }
 
 }
