@@ -14,6 +14,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.servlet.ModelAndView;
 
 import javax.annotation.Resource;
 import java.util.Map;
@@ -34,6 +35,12 @@ public class SysUserController {
     private SysTreeService sysTreeService;
     @Resource
     private SysRoleService sysRoleService;
+
+    @ResponseBody
+    @RequestMapping("/noAuth.page")
+    public ModelAndView noAuth() {
+        return new ModelAndView("noAuth");
+    }
 
     @ResponseBody
     @RequestMapping("/save.json")

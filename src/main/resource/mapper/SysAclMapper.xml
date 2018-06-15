@@ -217,6 +217,6 @@
   <select id="getByUrl" parameterType="string" resultMap="BaseResultMap">
     SELECT <include refid="Base_Column_List" />
     FROM sys_acl
-    WHERE url = #{url} <!-- url is not null and url != '' and  #{url} REGEXP url-->
+    WHERE url = #{url} <!--那种动态传参等 url is not null and url != '' and  #{url} REGEXP url-->
   </select>
 </mapper>
