@@ -1,13 +1,17 @@
 package com.cq.service;
 
+import com.cq.beans.CacheKeyConstants;
 import com.cq.common.RequestHolder;
 import com.cq.dao.SysAclMapper;
 import com.cq.dao.SysRoleAclMapper;
 import com.cq.dao.SysRoleUserMapper;
 import com.cq.model.SysAcl;
 import com.cq.model.SysUser;
+import com.cq.util.JsonMapper;
 import com.google.common.collect.Lists;
 import org.apache.commons.collections.CollectionUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.codehaus.jackson.type.TypeReference;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
@@ -29,6 +33,8 @@ public class SysCoreService {
     private SysAclMapper sysAclMapper;
     @Resource
     private SysRoleUserMapper sysRoleUserMapper;
+    @Resource
+    private SysCacheService sysCacheService;
 
     //当前用户已分配的权限点
     public List<SysAcl> getCurrentUserAclList() {
@@ -69,7 +75,7 @@ public class SysCoreService {
         // 可以是配置文件获取，可以指定某个用户，也可以指定某个角色
         SysUser sysUser = RequestHolder.getCurrentUser();
         if (sysUser.getMail().contains("admin")) {
-            return true;
+            return false;
         }
         return false;
     }
@@ -84,9 +90,10 @@ public class SysCoreService {
         if (CollectionUtils.isEmpty(aclList)) {
             return true;
         }
-        //List<SysAcl> userAclList = getCurrentUserAclListFromCache();
+
         //获取当前用户的所拥有的权限点
-        List<SysAcl> userAclList = getCurrentUserAclList();
+        List<SysAcl> userAclList = getCurrentUserAclListFromCache();
+        //List<SysAcl> userAclList = getCurrentUserAclList();
         Set<Integer> userAclIdSet = userAclList.stream().map(acl -> acl.getId()).collect(Collectors.toSet());
 
         boolean hasValidAcl = false;
@@ -109,7 +116,7 @@ public class SysCoreService {
     }
 
     //获取当前用户已有权限的权限点
-   /* public List<SysAcl> getCurrentUserAclListFromCache() {
+    public List<SysAcl> getCurrentUserAclListFromCache() {
         int userId = RequestHolder.getCurrentUser().getId();
         String cacheValue = sysCacheService.getFromCache(CacheKeyConstants.USER_ACLS, String.valueOf(userId));
         if (StringUtils.isBlank(cacheValue)) {
@@ -121,5 +128,5 @@ public class SysCoreService {
         }
         return JsonMapper.string2Obj(cacheValue, new TypeReference<List<SysAcl>>() {
         });
-    }*/
+    }
 }

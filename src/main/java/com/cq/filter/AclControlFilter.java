@@ -23,6 +23,7 @@ import java.util.Set;
  * @Auther: caoqsq
  * @Date: 2018/6/14 15:49
  * @Description: 权限拦截（权限拦截要在登录拦截之后） spring 拦截器和过滤器的区别：https://www.cnblogs.com/he-px/p/7133240.html
+ * 相等于shiro认证功能
  */
 @Slf4j
 public class AclControlFilter implements Filter {
