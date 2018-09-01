@@ -25,4 +25,6 @@ public class Mail {
 
     private Set<String> receivers;//收件人
 
+    //ceshi mac
+
 }
